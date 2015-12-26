@@ -1,6 +1,9 @@
 package xdavidwu.cameraapp;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -8,10 +11,14 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,6 +28,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int REQUEST_WRITE_STORAGE = 112;
     private Uri imageuri;
     private Uri getSaveFileUri() {
 
@@ -52,8 +60,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        boolean hasPermission = (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                Toast.makeText(MainActivity.this, "Please allow writing to external storage in App Settings.", Toast.LENGTH_LONG).show();
+            }
+            else{
+                ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+            }
+        }
 
-        takePhoto();
+        if (hasPermission) takePhoto();
+        else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            dialog.setTitle("Permission denied");
+            dialog.setMessage("Please allow writing to external storage in Settings or nothing wil work.");
+            dialog.show();
+            Button takephoto = (Button) findViewById(R.id.takephoto);
+            takephoto.setEnabled(false);
+        }
     }
 
     @Override

@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Take a photo"
-        android:onClick="takePhotoOnClick"/>
+        android:onClick="takePhotoOnClick"
+        android:id="@+id/takephoto"/>
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
