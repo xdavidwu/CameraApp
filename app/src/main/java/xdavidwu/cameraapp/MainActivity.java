@@ -91,14 +91,8 @@ public class MainActivity extends AppCompatActivity {
             imgv.setVisibility(View.VISIBLE);
             Bitmap raw;
 
-            if (data != null ) {
-                Toast.makeText(MainActivity.this, "Image saved to:\n" + data.getData(), Toast.LENGTH_LONG).show();
-                raw = BitmapFactory.decodeFile(data.getData().getPath());
-            }
-            else {
-                Toast.makeText(MainActivity.this, "Image saved to:\n" + imageuri, Toast.LENGTH_LONG).show();
-                raw = BitmapFactory.decodeFile(imageuri.getPath());
-            }
+            Toast.makeText(MainActivity.this, "Image saved to:\n" + imageuri, Toast.LENGTH_LONG).show();
+            raw = BitmapFactory.decodeFile(imageuri.getPath());
 
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
